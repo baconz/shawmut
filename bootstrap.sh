@@ -39,7 +39,7 @@ mkdir -p /srv/pillar
 cat <<-EOF > /srv/pillar/top.sls
 base:
   '*':
-    common
+    - common
 EOF
 cp "$SRC_DIR/salt/pillar.example" /srv/pillar/common.sls
 
