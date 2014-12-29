@@ -1,0 +1,7 @@
+Our mini home-automation suite!
+
+To set up:
+
+(1) Clone this repo to your desired machine
+(2) Run ```sudo ./bootstrap.sh```
+(3) Customize the pillar data in ```/srv/pillar/common.sls```
