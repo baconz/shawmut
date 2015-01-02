@@ -58,10 +58,9 @@ def turn_off_lights():
 
 def main(away_flag):
     log("Starting. Away_flag set to %s" %away_flag)
-
+    is_home = check_if_home()
     if have_guests():
         next
-    is_home = check_if_home()
     elif is_home and away_flag:
         # Just got home
         log('Just got home: Turning on any off lights and setting away_flag to False')
