@@ -39,20 +39,20 @@ def on_lights():
     return list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
 
 def toggle_lights(lights):
-    for l in lights:
-        print l
-        urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
+    log('toggling lights')
+    #for l in lights:
+    #    urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
 
 def turn_on_lights():
     found_off_lights = off_lights()
     if found_off_lights:
-        log("Turning on lights: %s" %found_off_lights)
+        log("Turning on lights: %s" %(',').join(found_off_lights))
         toggle_lights(found_off_lights)
 
 def turn_off_lights():
     found_on_lights = on_lights()
     if found_on_lights:
-        log("Turning off lights: %s" %found_on_lights)
+        log("Turning off lights: %s" %(',').join(found_on_lights))
         toggle_lights(found_on_lights)
 
 def main(away_flag):
