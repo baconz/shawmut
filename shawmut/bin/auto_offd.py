@@ -33,12 +33,10 @@ def light_data():
     return json.loads(data)
 
 def on_lights():
-    list(name for (name, data) in light_data().iteritems() if data['state'] == 0)
+    return list(name for (name, data) in light_data().iteritems() if data['state'] == 0)
 
 def off_lights():
-    a = list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
-    print a
-    return a
+    return list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
 
 def toggle_lights(lights):
     for l in lights:
