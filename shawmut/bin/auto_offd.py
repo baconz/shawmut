@@ -58,7 +58,7 @@ def main():
     if 'away_flag' not in locals():
         away_flag = True
         #away_flag = False
-
+    log("Starting. Away_flag set to %s" %away_flag)
     if have_guests():
         next
     elif is_home() and away_flag:
@@ -71,6 +71,8 @@ def main():
         log('Just left: Turning off any on lights and setting away flag to True')
         turn_off_lights()
         away_flag = True
+    else:
+        log("No changes, doing nothing")
 
 
 if __name__ == '__main__':
