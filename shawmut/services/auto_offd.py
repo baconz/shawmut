@@ -42,12 +42,14 @@ def toggle_lights(lights):
         urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
 
 def turn_on_lights():
-    log('Turning on lights')
-    toggle_lights(off_lights())
+    found_off_lights = off_lights()
+    log("Turning on lights: %s" %found_off_lights)
+    toggle_lights(found_off_lights)
 
 def turn_off_lights():
-    log('Turning off lights')
-    toggle_lights(on_lights())
+    found_on_lights = on_lights()
+    log("Turning off lights: %s" %found_on_lights)
+    toggle_lights(found_on_lights)
 
 def main():
     if 'away_flag' not in locals():
