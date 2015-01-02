@@ -22,7 +22,9 @@ def is_home():
         ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
         log("Found status of %s pinging %s" %(ip_status, ip))
         if ip_status == 0:
+            print('returning true')
             return True
+    print('returning false')
     return False
 
 def have_guests():
@@ -57,18 +59,22 @@ def turn_off_lights():
 def main():
     if 'away_flag' not in locals():
         away_flag = True
-        #away_flag = False
+
     log("Starting. Away_flag set to %s" %away_flag)
+
     if have_guests():
         next
     elif is_home() and away_flag:
         # Just got home
-        log('Just got home: Turning on any off lights and setting away flag to False')
+        log('Just got home: Turning on any off lights and setting away_flag to False')
         turn_on_lights()
         away_flag = False
     elif not (is_home() and away_flag):
+        #if we_are_away && !away_flag: turn off all lights and set away_flag
+        # if not home, and away_flag is set to false => if not(false and true)
+        # not (false and true)
         # Just left
-        log('Just left: Turning off any on lights and setting away flag to True')
+        log('Just left: Turning off any on lights and setting away_flag to True')
         turn_off_lights()
         away_flag = True
     else:
@@ -76,6 +82,7 @@ def main():
 
 
 if __name__ == '__main__':
+
     while True:
         time.sleep(SCHEDULER_INTERVAL)
         main()
