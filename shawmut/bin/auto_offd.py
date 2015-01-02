@@ -39,9 +39,8 @@ def on_lights():
     return list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
 
 def toggle_lights(lights):
-    log('toggling lights')
-    #for l in lights:
-    #    urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
+    for l in lights:
+        urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
 
 def turn_on_lights():
     found_off_lights = off_lights()
@@ -61,14 +60,10 @@ def main(away_flag):
     if have_guests():
         next
     elif is_home and away_flag:
-        # Just got home
         log('Home james: Turning on any off lights and setting away_flag to False')
         turn_on_lights()
         away_flag = False
     elif not is_home and not away_flag:
-        #if we_are_away && !away_flag: turn off all lights and set away_flag
-        # if not home, and away_flag is set to false => if not(false and true)
-        # Just left
         log('Gonzo: Turning off any on lights and setting away_flag to True')
         turn_off_lights()
         away_flag = True
