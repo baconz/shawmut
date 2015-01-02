@@ -56,10 +56,7 @@ def turn_off_lights():
         log("Turning off lights: %s" %found_on_lights)
         toggle_lights(found_on_lights)
 
-def main():
-    if 'away_flag' not in locals():
-        away_flag = True
-
+def main(away_flag):
     log("Starting. Away_flag set to %s" %away_flag)
 
     if have_guests():
@@ -83,6 +80,7 @@ def main():
 
 if __name__ == '__main__':
 
+    away_flag = False
     while True:
         time.sleep(SCHEDULER_INTERVAL)
-        main()
+        away_flag = main(away_flag)
