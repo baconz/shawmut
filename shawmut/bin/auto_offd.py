@@ -1,13 +1,13 @@
 #!/usr/bin/env
 
-from threading import Timer
+import time
 from datetime import datetime
 from subprocess import call
 import os.path
 import urllib2
 import json
 
-SCHEDULER_INTERVAL = 1
+SCHEDULER_INTERVAL = 5
 ADDRESSES = [ '10.0.1.16', '192.168.13.6' ]
 
 # TODO capture timestamp instead of away_flag
@@ -20,7 +20,7 @@ def is_home():
     for ip in ADDRESSES:
         DEVNULL = open(os.devnull, 'w') # TODO move outside loop
         ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
-        log("Found result %s pinging %s" %(ip_status, ip))
+        log("Found status of %s pinging %s" %(ip_status, ip))
         if ip_status == 0:
             return True
     return False
@@ -62,17 +62,17 @@ def main():
         next
     elif is_home() and away_flag:
         # Just got home
-        log('Just got home: Turning on lights and setting away flag to False')
+        log('Just got home: Turning on any off lights and setting away flag to False')
         turn_on_lights()
         away_flag = False
     elif not (is_home() and away_flag):
         # Just left
-        log('Just left: Turning off lights and setting away flag to True')
+        log('Just left: Turning off any on lights and setting away flag to True')
         turn_off_lights()
         away_flag = True
 
 
 if __name__ == '__main__':
-
-    timer = Timer(SCHEDULER_INTERVAL, main()).start()
-    timer.start()
+    while True:
+        time.sleep(SCHEDULER_INTERVAL)
+        main()
