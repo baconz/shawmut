@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env
 
 from threading import Timer
 from datetime import datetime
@@ -19,7 +19,8 @@ def log(msg):
 def is_home():
     for ip in ADDRESSES:
         DEVNULL = open(os.devnull, 'w') # TODO move outside loop
-        found_ip = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
+        ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
+        log("Found result %s pinging %s" %(ip_status, address))
         if found_ip == 0:
             return True
     return False
@@ -43,19 +44,20 @@ def toggle_lights(lights):
 
 def turn_on_lights():
     found_off_lights = off_lights()
-    log("Turning on lights: %s" %found_off_lights)
-    toggle_lights(found_off_lights)
+    if found_off_lights:
+        log("Turning on lights: %s" %found_off_lights)
+        toggle_lights(found_off_lights)
 
 def turn_off_lights():
     found_on_lights = on_lights()
-    log("Turning off lights: %s" %found_on_lights)
-    toggle_lights(found_on_lights)
+    if found_on_lights:
+        log("Turning off lights: %s" %found_on_lights)
+        toggle_lights(found_on_lights)
 
 def main():
     if 'away_flag' not in locals():
-        # TODO fix this
         away_flag = False
-    print away_flag # debug
+
     if have_guests():
         next
     elif is_home() and away_flag:
