@@ -56,7 +56,8 @@ def turn_off_lights():
 
 def main():
     if 'away_flag' not in locals():
-        away_flag = False
+        away_flag = True
+        #away_flag = False
 
     if have_guests():
         next
