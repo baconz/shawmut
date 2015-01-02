@@ -20,8 +20,8 @@ def is_home():
     for ip in ADDRESSES:
         DEVNULL = open(os.devnull, 'w') # TODO move outside loop
         ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
-        log("Found result %s pinging %s" %(ip_status, address))
-        if found_ip == 0:
+        log("Found result %s pinging %s" %(ip_status, ip))
+        if ip_status == 0:
             return True
     return False
 
