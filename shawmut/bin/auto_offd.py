@@ -76,6 +76,7 @@ def main(away_flag):
         away_flag = True
     else:
         log("No changes, doing nothing")
+    return away_flag
 
 
 if __name__ == '__main__':
