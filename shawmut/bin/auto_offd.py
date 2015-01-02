@@ -16,15 +16,13 @@ ADDRESSES = [ '10.0.1.16', '192.168.13.6' ]
 def log(msg):
     print "%s: %s" % (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), msg)
 
-def is_home():
+def check_if_home():
     for ip in ADDRESSES:
         DEVNULL = open(os.devnull, 'w') # TODO move outside loop
         ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
         log("Found status of %s pinging %s" %(ip_status, ip))
         if ip_status == 0:
-            print('returning true')
             return True
-    print('returning false')
     return False
 
 def have_guests():
@@ -38,7 +36,9 @@ def on_lights():
     list(name for (name, data) in light_data().iteritems() if data['state'] == 0)
 
 def off_lights():
-    list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
+    a = list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
+    print a
+    return a
 
 def toggle_lights(lights):
     for l in lights:
@@ -61,12 +61,13 @@ def main(away_flag):
 
     if have_guests():
         next
-    elif is_home() and away_flag:
+    is_home = check_if_home()
+    elif is_home and away_flag:
         # Just got home
         log('Just got home: Turning on any off lights and setting away_flag to False')
         turn_on_lights()
         away_flag = False
-    elif not (is_home() and away_flag):
+    elif not (is_home and away_flag):
         #if we_are_away && !away_flag: turn off all lights and set away_flag
         # if not home, and away_flag is set to false => if not(false and true)
         # not (false and true)
