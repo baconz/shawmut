@@ -32,14 +32,15 @@ def light_data():
     data = urllib2.urlopen('http://localhost:5000/api/environment').read()
     return json.loads(data)
 
-def on_lights():
+def off_lights():
     return list(name for (name, data) in light_data().iteritems() if data['state'] == 0)
 
-def off_lights():
+def on_lights():
     return list(name for (name, data) in light_data().iteritems() if data['state'] == 1)
 
 def toggle_lights(lights):
     for l in lights:
+        print l
         urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
 
 def turn_on_lights():
