@@ -62,15 +62,14 @@ def main(away_flag):
         next
     elif is_home and away_flag:
         # Just got home
-        log('Just got home: Turning on any off lights and setting away_flag to False')
+        log('Home james: Turning on any off lights and setting away_flag to False')
         turn_on_lights()
         away_flag = False
-    elif not (is_home and away_flag):
+    elif not is_home and not away_flag:
         #if we_are_away && !away_flag: turn off all lights and set away_flag
         # if not home, and away_flag is set to false => if not(false and true)
-        # not (false and true)
         # Just left
-        log('Just left: Turning off any on lights and setting away_flag to True')
+        log('Gonzo: Turning off any on lights and setting away_flag to True')
         turn_off_lights()
         away_flag = True
     else:
