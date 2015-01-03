@@ -13,7 +13,7 @@ salt-minion:
 
 /etc/resolv.conf:
   file:
-    - present
+    - managed
     - contents: "nameserver 8.8.8.8\n"
 
 dnsmasq:
