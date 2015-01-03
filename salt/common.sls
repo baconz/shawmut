@@ -4,6 +4,11 @@ common_packages:
       - python-setuptools
       - emacs
 
+salt-minion:
+  service:
+    - running
+    - enable: true
+
 /etc/resolv.conf:
   file:
     - present
