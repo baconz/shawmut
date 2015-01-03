@@ -1,16 +1,16 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
+import socket
 import time
 from datetime import datetime
-from subprocess import call
 import os.path
 import urllib2
 import json
 
 SCHEDULER_INTERVAL = 5
-ADDRESSES = [ '10.0.1.16', '192.168.13.6' ]
+CONNECTION_TIMEOUT = 3
+ADDRESSES = [ '192.168.13.9', '192.168.13.6' ]
 
-# TODO capture timestamp instead of away_flag
 # TODO only turn on lights on night time
 
 def log(msg):
@@ -18,19 +18,23 @@ def log(msg):
 
 def check_if_home():
     for ip in ADDRESSES:
-        DEVNULL = open(os.devnull, 'w') # TODO move outside loop
-        ip_status = call(['ping', ip, '-q', '-w', '1', '-c', '1'], stdout=DEVNULL, close_fds=True)
-        log("Found status of %s pinging %s" %(ip_status, ip))
-        if ip_status == 0:
+        try:
+            conn = socket.create_connection((ip, 62078), CONNECTION_TIMEOUT)
             return True
+        except socket.timeout:
+            log("Timed out: %s is not connected to our network" %ip)
     return False
 
 def have_guests():
     os.path.isfile('/etc/shawmut/have_guests')
 
 def light_data():
-    data = urllib2.urlopen('http://localhost:5000/api/environment').read()
-    return json.loads(data)
+    try:
+        data = urllib2.urlopen('http://localhost:5000/api/environment').read()
+        return json.loads(data)
+    except Exception as e:
+        log("Rescuing exception %s %s" %(e, e.message))
+        return {}
 
 def off_lights():
     return list(name for (name, data) in light_data().iteritems() if data['state'] == 0)
@@ -40,7 +44,11 @@ def on_lights():
 
 def toggle_lights(lights):
     for l in lights:
-        urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
+        try:
+            urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
+        except Exception as e:
+            log("Rescuing exception %s %s" %(e, e.message))
+
 
 def turn_on_lights():
     found_off_lights = off_lights()
@@ -58,7 +66,7 @@ def main(away_flag):
     log("Starting. Away_flag set to %s" %away_flag)
     is_home = check_if_home()
     if have_guests():
-        next
+        return away_flag
     elif is_home and away_flag:
         log('Home james: Turning on any off lights and setting away_flag to False')
         turn_on_lights()
@@ -68,7 +76,7 @@ def main(away_flag):
         turn_off_lights()
         away_flag = True
     else:
-        log("No changes, doing nothing")
+        log('No changes, doing nothing')
     return away_flag
 
 
