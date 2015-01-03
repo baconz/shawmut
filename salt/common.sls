@@ -3,6 +3,8 @@ common_packages:
     - pkgs:
       - python-setuptools
       - emacs
+      - screen
+      - bluez
 
 salt-minion:
   service:
