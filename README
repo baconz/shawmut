@@ -5,3 +5,5 @@ To set up:
 (1) Clone this repo to your desired machine
 (2) Run ```sudo ./bootstrap.sh```
 (3) Customize the pillar data in ```/srv/pillar/common.sls```
+(4) Make sure to set static IPs for the raspberry pi, and the iPhones
+(5) Set the IP of the Raspberry Pi as your DNS server
