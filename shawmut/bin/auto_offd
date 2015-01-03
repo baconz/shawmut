@@ -8,7 +8,7 @@ import urllib2
 import json
 
 SCHEDULER_INTERVAL = 5
-CONNECTION_TIMEOUT = 3
+CONNECTION_TIMEOUT = 10
 ADDRESSES = [ '192.168.13.9', '192.168.13.6' ]
 
 # TODO only turn on lights on night time
