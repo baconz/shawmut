@@ -2,7 +2,6 @@
 # Mount network hard drive for music
 # airplay setup
 # Setup.py for auto_offd
-# SSH Keys
 # Virtualenv for shawmut + shawmut service (ouimeaux, weather thingy, pyyaml)
 # Ouimeaux service
 # Set up pingdom with port-forwarding
