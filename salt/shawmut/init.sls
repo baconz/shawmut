@@ -24,6 +24,6 @@ shawmut_packages:
     - formatter: yaml
 
 {{ venv }}:
-  virtualenv_mod.managed:
-    user: {{ app_user }}
-    requirements: salt://shawmut/files/requirements.txt
+  virtualenv.managed:
+    - user: {{ app_user }}
+    - requirements: salt://shawmut/files/requirements.txt
