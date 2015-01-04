@@ -4,9 +4,10 @@
 
 # Application config file
 /etc/shawmut/shawmut.yml:
-  file.serialize:
-    - user: {{ shawmut.app_user }}
+  file.managed:
     - mode: 0600
     - show_diff: false
-    - dataset: {{ shawmut.conf }}
-    - formatter: yaml
+    - contents: "{{ shawmut.conf | yaml() | indent(8) }}"
+    - user: {{ shawmut.app_user }}
+
+
