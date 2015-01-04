@@ -7,6 +7,7 @@ import os.path
 import time
 from datetime import datetime
 from optparse import OptionParser
+
 from shawmut.settings import conf
 from shawmut.weather import ShawmutWeather
 
@@ -74,20 +75,23 @@ class AutoOffPoller(object):
 
     def poll(self):
         self.log_debug("Starting poll - is_away set to %s" % self.is_away)
-        is_home = self.check_if_home()
+        arrived_home = self.check_if_home()
 
         if self.has_guests():
-            next
-        elif is_home and self.is_away:
+            return
+
+        elif arrived_home and self.is_away:
             self.log_debug('Home james: Turning on any off lights and setting self.is_away to False')
-            self.turn_on_lights()
             self.is_away = False
-        elif not is_home and not self.is_away:
-            self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
-            self.is_away = True
             if self.weather.is_dark():
                 self.log_debug("It's dark out: Turning off any on lights")
-                self.turn_off_lights()
+                self.turn_on_lights()
+
+        elif not arrived_home and not self.is_away:
+            self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
+            self.is_away = True
+            self.turn_off_lights()
+
         else:
             self.log_debug('No changes, doing nothing')
 
