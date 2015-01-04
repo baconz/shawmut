@@ -7,6 +7,8 @@ shawmut_packages:
       - python-all-dev
       - libevent-dev
       - daemon
+      - bluez
+      - libbluetooth-dev
 
 {{ shawmut.venv }}:
   virtualenv.managed:

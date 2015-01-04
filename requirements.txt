@@ -1,3 +1,4 @@
 ouimeaux==0.7.3
 requests-forecast==0.6.2
 PyYAML==3.11
+PyBluez==0.20
