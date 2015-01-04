@@ -3,7 +3,7 @@ from requests_forecast import Forecast
 from shawmut.settings import conf
 
 class ShawmutWeather(object):
-    MAX_RETRIES = 500 # We are allowed 1000 API calls per today, so this is pretty conservative
+    MAX_RETRIES = 500 # We are allowed 1000 API calls per today so this is pretty conservative
 
     def __init__(self):
         self.refresh_todays_data()
@@ -39,5 +39,5 @@ class ShawmutWeather(object):
 
     def is_dark(self):
         self.get_todays_data()
-        # Later we can also check if it's raining in which case we probably want to turn on lights
+        # Later we can also check for other conditions like snow/rain in case we prob want to turn on lights
         return self.is_night_time()
