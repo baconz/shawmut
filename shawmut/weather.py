@@ -12,7 +12,7 @@ class ShawmutWeather(object):
 
     def get_todays_data(self):
         if not self.todays_data or datetime.now() > self.todays_date():
-            self.daily_retries = 0
+            self.retries = 0
             try:
                 forecast = Forecast(apikey=conf.forecast_io_key, latitude=conf.latitude, longitude=conf.longitude)
                 self.todays_data = forecast.get_daily()['data'][0]
