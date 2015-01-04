@@ -24,7 +24,7 @@ class ShawmutWeather(object):
                     if self.todays_data is None:
                         self.get_todays_data()
                 else:
-                    log("Reached max number of retries. Re-raising exception %s" % e)
+                    puts("Reached max number of retries. Re-raising exception %s" % e)
                     raise e
 
     def todays_date(self):
