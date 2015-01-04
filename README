@@ -7,3 +7,12 @@ To set up:
 (3) Customize the pillar data in ```/srv/pillar/common.sls```
 (4) Make sure to set static IPs for the raspberry pi, and the iPhones
 (5) Set the IP of the Raspberry Pi as your DNS server
+
+Pairing Your iPhone
+
+(1) Settings -> Bluetooth and switch Bluetooth on
+(2) ```hcitool scan``` and note the address of your iPhone
+(3) Make sure your phone is awake and discoverable and run:
+        sudo bluez-simple-agent -c DisplayYesNo <YOUR_DEV (eg hci0)> <BD_ADDR>
+(4) Tap "Pair" on your iPhone
+(5) Add the address of your iPhone to bd_addrs in pillar data

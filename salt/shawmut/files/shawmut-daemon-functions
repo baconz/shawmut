@@ -1,0 +1,67 @@
+LOGFILE=/var/log/$NAME.log
+PIDFILE=/tmp/${NAME}_daemon.pid
+
+ARGS_FILE=/etc/shawmut/${NAME}_flags
+if [ -e "$ARGS_FILE" ]; then
+  DAEMON_ARGS="$DAEMON_ARGS `cat $ARGS_FILE`"
+fi
+
+test -x $DAEMON || exit 1
+
+if [ ! -e "$LOGFILE" ]; then
+        touch "$LOGFILE"
+fi
+chown $USER "$LOGFILE"
+
+do_start()
+{
+    echo "Starting $NAME"
+    daemon $ADDL_OPTS -n $NAME -D / --pidfile=$PIDFILE --user=$USER --output=$LOGFILE -r --delay=10 -- $DAEMON $DAEMON_ARGS || (echo "FAIL" && return 1)
+    return 0
+}
+
+do_stop()
+{
+    echo "Stopping $NAME"
+    daemon $ADDL_OPTS -n $NAME --stop --pidfile=$PIDFILE --user=$USER
+    RETCODE=$?
+    i=1
+    while [ $i -lt 30 ]; do
+        daemon $ADDL_OPTS --pidfile=$PIDFILE --user=$USER --name=$NAME --running
+        if [ $? -eq 1 ]; then   # $? == 1 means "daemon --running" failed, which means service has been stopped
+            return $RETCODE
+        fi
+        sleep 1
+        i=`expr 1 + $i`
+    done
+    # Bad things happened, we couldn't stop it!
+    return $RETCODE
+}
+
+case "$1" in
+start)
+    do_start
+    exit $?
+;;
+status)
+    if daemon --pidfile=$PIDFILE --name=$NAME --running ; then
+        echo "Running"
+        exit 0
+    else
+        echo "Stopped"
+        exit 1
+    fi
+;;
+stop)
+    do_stop
+    exit $?
+;;
+restart)
+    do_stop
+    do_start
+    exit $?
+;;
+*)
+    echo "Usage: $0 {status|start|stop|restart}"
+    exit 1
+esac
