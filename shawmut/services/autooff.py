@@ -83,19 +83,19 @@ class AutoOffPoller(object):
             self.turn_on_lights()
             self.is_away = False
         elif not is_home and not self.is_away:
-            self.log_debug('Gonzo: Setting self.is_away to True and cheking if it\'s dark out')
+            self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
             self.is_away = True
             if self.weather.is_dark():
-                self.log_debug('It\s dark out: Turning off any on lights')
+                self.log_debug("It's dark out: Turning off any on lights")
                 self.turn_off_lights()
         else:
             self.log_debug('No changes, doing nothing')
 
 def main():
     parser = OptionParser()
-    parser.add_option("-q", "--quiet",
-                      action="store_false", dest="verbose", default=True,
-                      help='Don\t print verbose output')
+    parser.add_option('-q', '--quiet',
+                      action='store_false', dest='verbose', default=True,
+                      help="Don't print verbose output")
     (options, args) = parser.parse_args()
 
     auto_off = AutoOffPoller(options.verbose)
