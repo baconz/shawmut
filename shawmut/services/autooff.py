@@ -5,6 +5,7 @@ import urllib2
 import json
 import os.path
 import time
+import bluetooth
 from datetime import datetime
 from optparse import OptionParser
 
@@ -12,7 +13,6 @@ from shawmut.settings import conf
 from shawmut.weather import ShawmutWeather
 
 SCHEDULER_INTERVAL = 5
-CONNECTION_TIMEOUT = 10
 
 
 class AutoOffPoller(object):
@@ -29,12 +29,10 @@ class AutoOffPoller(object):
             self.log(msg)
 
     def check_if_home(self):
-        for ip in conf.iphone_ips:
-            try:
-                conn = socket.create_connection((ip, 62078), CONNECTION_TIMEOUT)
+        for bd_addr in conf.bd_addrs:
+            res = bluetooth.lookup_name(bd_addr)
+            if res is not None:
                 return True
-            except socket.timeout:
-                self.log_debug("Timed out: %s is not connected to our network" % ip)
         return False
 
     def has_guests(self):
