@@ -1,3 +1,5 @@
+{%- from 'shawmut/settings.sls' import shawmut with context %}
+
 # Daemon functions shared by all services
 /lib/init/shawmut-exec-functions:
   file.managed:
@@ -17,11 +19,11 @@
     - mode: 755
     - defaults:
         service_name: {{ service }}
-        venv: {{ venv }}
-        service_user: {{ app_user }}
+        venv: {{ shawmut.venv }}
+        service_user: {{ shawmut.app_user }}
   service.running:
     - enable: true
     - watch:
       - file: /etc/shawmut/shawmut.yml
-      - virtualenv: {{ venv }}
+      - virtualenv: {{ shawmut.venv }}
 {% endfor %}

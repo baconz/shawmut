@@ -1,3 +1,5 @@
+{%- from 'shawmut/settings.sls' import shawmut with context %}
+
 # OuiMeaux Dependencies
 shawmut_packages:
   pkg.installed:
@@ -6,7 +8,7 @@ shawmut_packages:
       - libevent-dev
       - daemon
 
-{{ venv }}:
+{{ shawmut.venv }}:
   virtualenv.managed:
-    - user: {{ app_user }}
+    - user: {{ shawmut.app_user }}
     - requirements: salt://shawmut/files/requirements.txt
