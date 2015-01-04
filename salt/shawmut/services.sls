@@ -10,7 +10,7 @@
   file.managed:
     - contents: "-d server\n"
 
-{% for service in ['shawmut_wemo', 'shawmut_auto_offd'] %}
+{% for service in ['wemo', 'auto_offd'] %}
 {{ service }}:
   file.managed:
     - name: /etc/init.d/{{ service }}

@@ -10,7 +10,7 @@
 # Description:       starts {{ service_name }}
 ### END INIT INFO
 
-NAME={{ service_name }}
+NAME=shawmut_{{ service_name }}
 DAEMON={{ venv }}/bin/{{ service_name }}
 DAEMON_ARGS=
 
