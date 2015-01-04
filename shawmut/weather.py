@@ -2,6 +2,7 @@ from datetime import datetime
 from requests_forecast import Forecast
 from shawmut.settings import conf
 
+
 class ShawmutWeather(object):
     MAX_RETRIES = 500 # We are allowed 1000 API calls per today so this is pretty conservative
 

@@ -14,6 +14,7 @@ from shawmut.weather import ShawmutWeather
 SCHEDULER_INTERVAL = 5
 CONNECTION_TIMEOUT = 10
 
+
 class AutoOffPoller(object):
     def __init__(self, verbose=False):
         self.is_away = False
@@ -79,21 +80,19 @@ class AutoOffPoller(object):
 
         if self.has_guests():
             return
-
         elif arrived_home and self.is_away:
             self.log_debug('Home james: Turning on any off lights and setting self.is_away to False')
             self.is_away = False
             if self.weather.is_dark():
                 self.log_debug("It's dark out: Turning off any on lights")
                 self.turn_on_lights()
-
         elif not arrived_home and not self.is_away:
             self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
             self.is_away = True
             self.turn_off_lights()
-
         else:
             self.log_debug('No changes, doing nothing')
+
 
 def main():
     parser = OptionParser()
@@ -110,4 +109,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
