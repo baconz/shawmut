@@ -1,9 +1,6 @@
 # Logrotate
 # Mount network hard drive for music
 # airplay setup
-# Setup.py for auto_offd
-# Virtualenv for shawmut + shawmut service (ouimeaux, weather thingy, pyyaml)
-# Ouimeaux service
 # Set up pingdom with port-forwarding
 # Monitoring of our services
 # salt-minion keeps dying
