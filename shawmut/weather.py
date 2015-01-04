@@ -20,11 +20,11 @@ class ShawmutWeather(object):
             except Exception as e:
                 if self.retries < MAX_RETRIES:
                     self.retries +=1
-                    puts("Rescuing exception trying to get forecast data: %s %s. Keeping yesterday's data cached" %(e, e.message))
+                    print("Rescuing exception trying to get forecast data: %s %s. Keeping yesterday's data cached" %(e, e.message))
                     if self.todays_data is None:
                         self.get_todays_data()
                 else:
-                    puts("Reached max number of retries. Re-raising exception %s" % e)
+                    print("Reached max number of retries. Re-raising exception %s" % e)
                     raise e
 
     def todays_date(self):
