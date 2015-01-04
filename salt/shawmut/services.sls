@@ -1,9 +1,9 @@
 {%- from 'shawmut/settings.sls' import shawmut with context %}
 
 # Daemon functions shared by all services
-/lib/init/shawmut-exec-functions:
+/lib/init/shawmut-daemon-functions:
   file.managed:
-    - source: salt://shawmut/files/shawmut-exec-functions
+    - source: salt://shawmut/files/shawmut-daemon-functions
 
 # Arguments to pass to the shawmut wemo service
 /etc/shawmut/shawmut_wemo_flags:
