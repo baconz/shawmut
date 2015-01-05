@@ -3,9 +3,10 @@
 import socket
 import urllib2
 import json
-import os.path
 import time
+import logging
 import bluetooth
+import os.path
 from datetime import datetime
 from optparse import OptionParser
 
@@ -20,13 +21,9 @@ class AutoOffPoller(object):
         self.is_away = False
         self.weather = ShawmutWeather()
         self.verbose = verbose
+        logging.basicConfig(level=logging.INFO,
+                            format='%(asctime)s %(message)s')
 
-    def log(self, msg):
-        print "%s: %s" % (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), msg)
-
-    def log_debug(self, msg):
-        if self.verbose:
-            self.log(msg)
 
     def check_if_home(self):
         for bd_addr in conf.bd_addrs:
@@ -43,7 +40,7 @@ class AutoOffPoller(object):
             data = urllib2.urlopen('http://localhost:5000/api/environment').read()
             return json.loads(data)
         except Exception as e:
-            self.log("Rescuing exception %s %s" %(e, e.message))
+            logging.error("Rescuing exception %s %s" %(e, e.message))
             return {}
 
     def off_lights(self):
@@ -58,38 +55,38 @@ class AutoOffPoller(object):
             try:
                 urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
             except Exception as e:
-                self.log("Rescuing exception %s %s" %(e, e.message))
+                logging.error("Rescuing exception %s %s" %(e, e.message))
 
     def turn_on_lights(self):
         found_off_lights = self.off_lights()
         if found_off_lights:
-            self.log("Turning on lights: %s" %(',').join(found_off_lights))
+            logging.debug("Turning on lights: %s" %(',').join(found_off_lights))
             self.toggle_lights(found_off_lights)
 
     def turn_off_lights(self):
         found_on_lights = self.on_lights()
         if found_on_lights:
-            self.log("Turning off lights: %s" %(',').join(found_on_lights))
+            logging.debug("Turning off lights: %s" %(',').join(found_on_lights))
             self.toggle_lights(found_on_lights)
 
     def poll(self):
-        self.log_debug("Starting poll - is_away set to %s" % self.is_away)
+        logging.debug("Starting poll - is_away set to %s" % self.is_away)
         arrived_home = self.check_if_home()
 
         if self.has_guests():
             return
         elif arrived_home and self.is_away:
-            self.log_debug('Home james: Turning on any off lights and setting self.is_away to False')
+            logging.debug('Home james: Turning on any off lights and setting self.is_away to False')
             self.is_away = False
             if self.weather.is_dark():
-                self.log_debug("It's dark out: Turning off any on lights")
+                logging.debug("It's dark out: Turning off any on lights")
                 self.turn_on_lights()
         elif not arrived_home and not self.is_away:
-            self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
+            logging.debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
             self.is_away = True
             self.turn_off_lights()
         else:
-            self.log_debug('No changes, doing nothing')
+            logging.debug('No changes, doing nothing')
 
 
 def main():
