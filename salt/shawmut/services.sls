@@ -10,6 +10,10 @@
   file.managed:
     - contents: "-d server\n"
 
+/etc/shawmut/shawmut_auto_offd_flags:
+  file.managed:
+    - contents: "-v\n"
+
 {% for service in ['wemo', 'auto_offd'] %}
 {{ service }}:
   file.managed:
@@ -26,4 +30,5 @@
     - watch:
       - file: /etc/shawmut/shawmut.yml
       - virtualenv: {{ shawmut.venv }}
+      - file: /etc/shawmut/shawmut_{{ service }}_flags
 {% endfor %}
