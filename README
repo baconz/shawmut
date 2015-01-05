@@ -20,5 +20,5 @@ Pairing Your iPhone
 
 To deploy
 ---------
-(1) Go to /home/pi/src/shawmut (or your local checkout and do a git pull
+(1) Go to /home/pi/src/shawmut (or your local) checkout and do a git pull
 (2) Run ```sudo salt-call state.highstate```
