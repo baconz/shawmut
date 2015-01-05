@@ -94,9 +94,9 @@ class AutoOffPoller(object):
 
 def main():
     parser = OptionParser()
-    parser.add_option('-q', '--quiet',
-                      action='store_false', dest='verbose', default=True,
-                      help="Don't print verbose output")
+    parser.add_option('-v', '--verbose',
+                      action='store_true', dest='verbose', default=False,
+                      help='Verbose logging')
     (options, args) = parser.parse_args()
 
     auto_off = AutoOffPoller(options.verbose)
