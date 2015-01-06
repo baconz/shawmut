@@ -37,7 +37,7 @@ class AutoOffPoller(object):
             data = urllib2.urlopen('http://localhost:5000/api/environment').read()
             return json.loads(data)
         except Exception as e:
-            logging.error("Rescuing exception %s %s" %(e, e.message))
+            logging.error("Rescuing exception trying to read environment data %s %s" %(e, e.message))
             return {}
 
     def off_lights(self):
@@ -52,7 +52,7 @@ class AutoOffPoller(object):
             try:
                 urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
             except Exception as e:
-                logging.error("Rescuing exception %s %s" %(e, e.message))
+                logging.error("Rescuing exception toggling lights for %s: %s %s" %(l, e, e.message))
 
     def turn_on_lights(self):
         found_off_lights = self.off_lights()
@@ -88,14 +88,14 @@ class AutoOffPoller(object):
 
 def main():
     parser = OptionParser()
-    parser.add_option('-v', '--verbose',
-                      action='store_true', dest='verbose', default=False,
-                      help='Verbose logging')
+    parser.add_option('-d', '--debug',
+                      action='store_true', dest='debug', default=False,
+                      help='Debug-level logging')
     (options, args) = parser.parse_args()
 
     auto_off = AutoOffPoller()
 
-    if options.verbose:
+    if options.debug:
         level = logging.DEBUG
     else:
         level = logging.INFO
