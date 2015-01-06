@@ -21,9 +21,9 @@ class AutoOffPoller(object):
         self.is_away = False
         self.weather = ShawmutWeather()
         if verbose:
-            level = logging.INFO
-        else:
             level = logging.DEBUG
+        else:
+            level = logging.INFO
         logging.basicConfig(level=level,
                             format='%(asctime)s %(message)s')
 
