@@ -18,7 +18,7 @@ SCHEDULER_INTERVAL = 5
 
 
 class AutoOffPoller(object):
-    def __init__(self)
+    def __init__(self):
         self.is_away = False
         self.weather = ShawmutWeather()
 
