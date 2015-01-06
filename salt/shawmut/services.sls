@@ -5,6 +5,10 @@
   file.managed:
     - source: salt://shawmut/files/shawmut-daemon-functions
 
+/etc/logrotate.d/shawmut:
+  file.managed:
+    - source: salt://shawmut/files/shawmut.logrotate
+
 # Arguments to pass to the shawmut wemo service
 /etc/shawmut/shawmut_wemo_flags:
   file.managed:
@@ -12,7 +16,7 @@
 
 /etc/shawmut/shawmut_auto_offd_flags:
   file.managed:
-    - contents: "-v\n"
+    - contents: "-d\n"
 
 {% for service in ['wemo', 'auto_offd'] %}
 {{ service }}:
