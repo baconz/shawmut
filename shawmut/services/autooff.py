@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
+import sys
 import socket
 import urllib2
 import json
-import os.path
 import time
+import logging
+import bluetooth
+import os.path
 from datetime import datetime
 from optparse import OptionParser
 
@@ -12,29 +15,18 @@ from shawmut.settings import conf
 from shawmut.weather import ShawmutWeather
 
 SCHEDULER_INTERVAL = 5
-CONNECTION_TIMEOUT = 10
 
 
 class AutoOffPoller(object):
-    def __init__(self, verbose=False):
+    def __init__(self):
         self.is_away = False
         self.weather = ShawmutWeather()
-        self.verbose = verbose
-
-    def log(self, msg):
-        print "%s: %s" % (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), msg)
-
-    def log_debug(self, msg):
-        if self.verbose:
-            self.log(msg)
 
     def check_if_home(self):
-        for ip in conf.iphone_ips:
-            try:
-                conn = socket.create_connection((ip, 62078), CONNECTION_TIMEOUT)
+        for bd_addr in conf.bd_addrs:
+            res = bluetooth.lookup_name(bd_addr)
+            if res is not None:
                 return True
-            except socket.timeout:
-                self.log_debug("Timed out: %s is not connected to our network" % ip)
         return False
 
     def has_guests(self):
@@ -45,7 +37,7 @@ class AutoOffPoller(object):
             data = urllib2.urlopen('http://localhost:5000/api/environment').read()
             return json.loads(data)
         except Exception as e:
-            self.log("Rescuing exception %s %s" %(e, e.message))
+            logging.error("Rescuing exception trying to read environment data %s %s" %(e, e.message))
             return {}
 
     def off_lights(self):
@@ -60,48 +52,56 @@ class AutoOffPoller(object):
             try:
                 urllib2.urlopen("http://localhost:5000/api/device/%s" %l, '{"state":"toggle"}')
             except Exception as e:
-                self.log("Rescuing exception %s %s" %(e, e.message))
+                logging.error("Rescuing exception toggling lights for %s: %s %s" %(l, e, e.message))
 
     def turn_on_lights(self):
         found_off_lights = self.off_lights()
         if found_off_lights:
-            self.log("Turning on lights: %s" %(',').join(found_off_lights))
+            logging.debug("Turning on lights: %s" %(',').join(found_off_lights))
             self.toggle_lights(found_off_lights)
 
     def turn_off_lights(self):
         found_on_lights = self.on_lights()
         if found_on_lights:
-            self.log("Turning off lights: %s" %(',').join(found_on_lights))
+            logging.debug("Turning off lights: %s" %(',').join(found_on_lights))
             self.toggle_lights(found_on_lights)
 
     def poll(self):
-        self.log_debug("Starting poll - is_away set to %s" % self.is_away)
+        logging.debug("Starting poll - is_away set to %s" % self.is_away)
         arrived_home = self.check_if_home()
 
         if self.has_guests():
             return
         elif arrived_home and self.is_away:
-            self.log_debug('Home james: Turning on any off lights and setting self.is_away to False')
+            logging.debug('Home james: Turning on any off lights and setting self.is_away to False')
             self.is_away = False
             if self.weather.is_dark():
-                self.log_debug("It's dark out: Turning off any on lights")
+                logging.debug("It's dark out: Turning off any on lights")
                 self.turn_on_lights()
         elif not arrived_home and not self.is_away:
-            self.log_debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
+            logging.debug("Gonzo: Setting self.is_away to True and cheking if it's dark out")
             self.is_away = True
             self.turn_off_lights()
         else:
-            self.log_debug('No changes, doing nothing')
+            logging.debug('No changes, doing nothing')
 
 
 def main():
     parser = OptionParser()
-    parser.add_option('-q', '--quiet',
-                      action='store_false', dest='verbose', default=True,
-                      help="Don't print verbose output")
+    parser.add_option('-d', '--debug',
+                      action='store_true', dest='debug', default=False,
+                      help='Debug-level logging')
     (options, args) = parser.parse_args()
 
-    auto_off = AutoOffPoller(options.verbose)
+    auto_off = AutoOffPoller()
+
+    if options.debug:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+    logging.basicConfig(level=level,
+                        format='%(asctime)s %(message)s',
+                        stream=sys.stdout)
 
     while True:
         auto_off.poll()
