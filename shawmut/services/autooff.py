@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import socket
 import urllib2
 import json
@@ -17,16 +18,9 @@ SCHEDULER_INTERVAL = 5
 
 
 class AutoOffPoller(object):
-    def __init__(self, verbose=False):
+    def __init__(self)
         self.is_away = False
         self.weather = ShawmutWeather()
-        if verbose:
-            level = logging.DEBUG
-        else:
-            level = logging.INFO
-        logging.basicConfig(level=level,
-                            format='%(asctime)s %(message)s')
-
 
     def check_if_home(self):
         for bd_addr in conf.bd_addrs:
@@ -99,7 +93,15 @@ def main():
                       help='Verbose logging')
     (options, args) = parser.parse_args()
 
-    auto_off = AutoOffPoller(options.verbose)
+    auto_off = AutoOffPoller()
+
+    if options.verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+    logging.basicConfig(level=level,
+                        format='%(asctime)s %(message)s',
+                        stream=sys.stdout)
 
     while True:
         auto_off.poll()

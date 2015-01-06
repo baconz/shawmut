@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 from requests_forecast import Forecast
 from shawmut.settings import conf
@@ -11,8 +10,6 @@ class ShawmutWeather(object):
     def __init__(self):
         self.todays_data = None
         self.get_todays_data()
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s %(message)s')
 
     def get_todays_data(self):
         if not self.todays_data or datetime.now().date() > self.todays_date():
