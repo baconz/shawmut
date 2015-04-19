@@ -3,15 +3,14 @@ schedule:
     function: state.highstate
     minutes: 3600
 
-base_hostname: shawmut.home
-base_ip: 192.168.13.17
+raspberrypi:
+  base_hostname: shawmut.home
+  base_ip: 192.168.13.17
 
-authorized_keys: []
+  authorized_keys: []
 
 shawmut:
   forecast_io_key: ""
   latitude: 42.337537
   longitude: -71.077435
   bd_addrs: []
-
-shared_storage_ip: 192.168.13.1
