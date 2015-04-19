@@ -1,0 +1,15 @@
+{
+  "name": "dyndns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1.24",
+    "express": "^4.12.3"
+  }
+}
