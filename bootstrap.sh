@@ -43,4 +43,11 @@ base:
 EOF
 cp "$SRC_DIR/salt/pillar.example" /srv/pillar/common.sls
 
+# Add roles to /etc/salt grains
+echo "roles:" > /etc/salt/grains
+for role in "$@"
+do
+    echo "  - ${role}" >> /etc/salt/grains
+done
+
 sudo service salt-minion restart
