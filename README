@@ -3,7 +3,7 @@ Our mini home-automation suite!
 To bootstrap
 ------------
 (1) Clone this repo to your desired machine
-(2) Run `sudo ./bootstrap.sh`
+(2) Run `sudo ./bootstrap.sh` -- optionally pass roles as arguments
 (3) Customize the pillar data in `/srv/pillar/common.sls`
 (4) Make sure to set static IPs for the raspberry pi
 (5) Set the IP of the Raspberry Pi as your DNS server
