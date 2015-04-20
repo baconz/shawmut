@@ -18,8 +18,13 @@ nginx:
     - running
     - watch:
       - file: /etc/nginx/sites-available/*
-
 /etc/nginx/conf: file.directory
+/etc/nginx/ssl: file.directory
+
+dhparam:
+  cmd.run:
+    - name: "openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048"
+    - creates: /etc/nginx/ssl/dhparam.pem
 
 /etc/nginx/sites-enabled/default: file.absent
 
