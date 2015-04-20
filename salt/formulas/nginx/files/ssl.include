@@ -1,0 +1,35 @@
+    # NOTE: required for ssl_stapling
+    resolver 8.8.8.8 valid=300s;
+    resolver_timeout 5s;
+
+    # SEE: https://wiki.mozilla.org/Security/Server_Side_TLS#Nginx
+    # SEE: https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+
+    # use a strong key for EDH cipher
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+
+    # do not use SSLv2 due to fundamental security flaws
+    # do not use SSLv3 due to POODLE attack, RC4 weaknesses, and downgrade
+    #  attacks against TLSv1
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    # shared 10 MB cache supports about 40,000 sessions
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 5m;
+    # prefer AES128 over AES256 or 3DES because it is widely supported, secure,
+    #  fast, and preferred by browser and hardware vendors
+    # prefer ephemeral-key cipher suites (EECDH, EDH) because they provide
+    #  forward secrecy
+    # exclude due to weaknesses: aNULL, eNULL, EXPORT, RC4, DES, MD5
+    # exclude non-preferred cipher suites.  as a result, the following clients
+    #  are not supported:
+    #   * Java 6u45
+    #   * Internet Explorer 8 on Windows XP
+    #   * Internet Explorer 6 on Windows XP
+    # SEE: https://briansmith.org/browser-ciphersuites-01.html
+    ssl_ciphers "AES128+EECDH:AES128+EDH";
+    ssl_prefer_server_ciphers on;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # instruct Internet Explorer <8 to turn off content type sniffing
+    add_header X-Content-Type-Options nosniff;
