@@ -16,10 +16,13 @@ shawmut:
   bd_addrs: []
 
 dyndns:
-  # Required for client:
+  # Required for client and server:
   username: dyndns
   password: superSecret
   host: smad.website
+  # Only required for client:
+  names:
+    - madison.pw
   # Only required for server:
   conf:
     accessKeyId: <YOUR_PUB_KEY>

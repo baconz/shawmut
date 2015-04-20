@@ -4,6 +4,7 @@ base:
 
   'raspberrypi':
     - raspberrypi
+    - dyndns.client
     - shawmut
 
   'roles:dyndns':
