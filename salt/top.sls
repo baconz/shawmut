@@ -5,3 +5,7 @@ base:
   'raspberrypi':
     - raspberrypi
     - shawmut
+
+  'roles:dyndns':
+    - match: grain
+    - dyndns

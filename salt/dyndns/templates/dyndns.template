@@ -1,0 +1,25 @@
+  passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+  server {
+    # ssl
+    listen 8443 default_server;
+    server_name {{ host }};
+
+    add_header Cache-Control "no-cache, no-store";
+
+    #include conf/ssl.include
+
+    #ssl_certificate {{ ssl_cert_path }}.cert;
+    #ssl_certificate_key {{ssl_cert_path }}.key;
+
+    # Tell Passenger where the app is.
+    passenger_app_root /webapps/foo;
+
+    location / {
+        auth_basic "authorized access only";
+        auth_basic_user_file {{ passwd_file }};
+        passenger_enabled on;
+        passenger_app_type node;
+
+        passenger_app_root /home/admin/shawmut/dyndns;
+     }
+  }

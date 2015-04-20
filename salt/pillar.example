@@ -14,3 +14,14 @@ shawmut:
   latitude: 42.337537
   longitude: -71.077435
   bd_addrs: []
+
+dyndns:
+  # Required for client:
+  username: dyndns
+  password: superSecret
+  host: smad.website
+  # Only required for server:
+  conf:
+    accessKeyId: <YOUR_PUB_KEY>
+    secretAccessKey: <YOUR_PRIV_KEY>
+  ssl_cert_path: /etc/ssl/smad.website
