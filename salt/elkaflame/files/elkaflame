@@ -13,6 +13,7 @@
     access_log /var/log/nginx/dyndns-access.log;
     error_log /var/log/nginx/dyndns-error.log;
 
+    client_max_body_size 5m;
 
     location / {
         passenger_enabled on;
