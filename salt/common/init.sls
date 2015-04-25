@@ -1,3 +1,6 @@
+include:
+  - backup
+
 common_packages:
   pkg.installed:
     - pkgs:

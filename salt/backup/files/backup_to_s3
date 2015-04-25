@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+function usage {
+    echo "./backup_to_s3 <bucket> <target_dir> <backup_name> <retain_n_copies>"
+}
+
+if ! [ $# -eq 4 ] ; then
+    usage
+    exit 1
+fi
+
+CONFIG_FILE=/etc/s3cfg-backup
+
+BUCKET="$1"
+TARGET_DIR="$2"
+BACKUP_NAME="$3"
+RETAIN="$4"
+BACKUP_TAR="/tmp/${BACKUP_NAME}.`/bin/date "+%Y-%m-%d@%s"`.tar.gz"
+
+/bin/tar -zcf "$BACKUP_TAR" "$TARGET_DIR"
+
+/usr/bin/s3cmd -e -c "$CONFIG_FILE" put "$BACKUP_TAR" "s3://${BUCKET}/"
+
+s3cmd -c "$CONFIG_FILE" ls "s3://${BUCKET}/" | \
+    awk '$1 != "DIR"' | \
+    sort -r | \
+    awk -v retain="$RETAIN" 'NR > retain {print $4;}' | \
+    xargs --no-run-if-empty s3cmd -c "$CONFIG_FILE" del
+
+rm "$BACKUP_TAR"

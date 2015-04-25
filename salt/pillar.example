@@ -28,3 +28,14 @@ dyndns:
     accessKeyId: <YOUR_PUB_KEY>
     secretAccessKey: <YOUR_PRIV_KEY>
   ssl_cert_path: /etc/ssl/smad.website
+
+backup:
+  bucket: smad.website
+  accessKeyId: <YOUR_PUB_KEY>
+  secretAccessKey: <YOUR_PRIV_KEY>
+  gpg_passphrase: <A_PASSPHRASE_THAT_YOU_HAVE_SAVED_SOMEPLACE_SAFE>
+  targets:
+    - dir: /var/www/ghost/content
+      name: ghost
+      hour: "*/4"
+      retain: 7
