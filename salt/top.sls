@@ -10,3 +10,7 @@ base:
   'roles:dyndns':
     - match: grain
     - dyndns
+
+  'roles:elkaflame':
+    - match: grain
+    - elkaflame

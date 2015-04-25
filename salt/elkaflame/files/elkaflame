@@ -1,0 +1,23 @@
+  server {
+    #  ssl
+    listen 80;
+    server_name elkaflame.com;
+
+    add_header Cache-Control "no-cache, no-store";
+
+    #include conf/ssl.include;
+
+    #ssl_certificate /etc/nginx/ssl/elkaflame.com.cert;
+    #ssl_certificate_key /etc/nginx/ssl/elkaflame.com.key;
+
+    access_log /var/log/nginx/dyndns-access.log;
+    error_log /var/log/nginx/dyndns-error.log;
+
+
+    location / {
+        passenger_enabled on;
+        passenger_app_type node;
+
+        passenger_app_root /var/www/ghost;
+     }
+  }
