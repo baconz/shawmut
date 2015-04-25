@@ -1,0 +1,4 @@
+{%- from 'formulas/ghost/settings.sls' import conf with context %}
+
+require('{{ conf['app_path'] }}/index.js');
+process.chdir('{{ conf['app_path'] }}');

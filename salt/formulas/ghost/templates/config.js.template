@@ -1,0 +1,24 @@
+{%- from 'formulas/ghost/settings.sls' import conf with context %}
+
+var path = require('path'),
+    config;
+
+config = {
+    production: {
+        url: '{{ conf["blog_url"] }}',
+        mail: {},
+        database: {
+            client: 'sqlite3',
+            connection: {
+                filename: path.join(__dirname, '/content/data/ghost.db')
+            },
+            debug: false
+        },
+        server: {
+            host: '127.0.0.1',
+            port: '2369'
+        }
+    }
+};
+
+module.exports = config;
