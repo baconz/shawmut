@@ -17,6 +17,8 @@ htpasswd_file:
     - name: {{ dyndns.username }}
     - password: {{ dyndns.password }}
     - htpasswd_file: {{ passwd_file }}
+    - watch_in:
+      - service: nginx
 
 /etc/nginx/sites-available/dyndns:
   file.managed:
@@ -27,6 +29,8 @@ htpasswd_file:
       passwd_file: {{ passwd_file }}
       host: {{ dyndns.host }}
       ssl_cert_path: {{ dyndns.ssl_cert_path }}
+    - watch_in:
+      - service: nginx
 
 /etc/nginx/sites-enabled/dyndns:
   file.symlink:

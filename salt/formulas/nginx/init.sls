@@ -18,6 +18,7 @@ nginx:
     - running
     - watch:
       - file: /etc/nginx/sites-available/*
+
 /etc/nginx/conf: file.directory
 /etc/nginx/ssl: file.directory
 
@@ -28,6 +29,14 @@ dhparam:
 
 /etc/nginx/sites-enabled/default: file.absent
 
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://formulas/nginx/files/nginx.conf
+    - watch_in:
+      - service: nginx
+
 /etc/nginx/conf/ssl.include:
   file.managed:
     - source: salt://formulas/nginx/files/ssl.include
+    - watch_in:
+      - service: nginx
