@@ -5,7 +5,7 @@
     return 301 https://elkaflame.com;
   }
   server {
-    listen 443;
+    listen 443 ssl;
     server_name elkaflame.com www.elkaflame.com blog.elkaflame.com;
 
     add_header Cache-Control "no-cache, no-store";
