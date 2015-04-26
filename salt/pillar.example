@@ -39,3 +39,7 @@ backup:
       name: ghost
       hour: "*/4"
       retain: 7
+    - dir: /etc/nginx/ssl
+      name: nginx-ssl
+      hour: "*/12"
+      retain: 4
