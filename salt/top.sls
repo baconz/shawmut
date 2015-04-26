@@ -6,6 +6,7 @@ base:
     - raspberrypi
     - dyndns.client
     - shawmut
+    - alexa
 
   'roles:dyndns':
     - match: grain
