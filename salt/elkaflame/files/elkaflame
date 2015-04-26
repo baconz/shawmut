@@ -1,17 +1,22 @@
   server {
-    #  ssl
     listen 80;
-    server_name elkaflame.com;
+    server_name elkaflame.com www.elkaflame.com blog.elkaflame.com;
+
+    return 301 https://elkaflame.com;
+  }
+  server {
+    listen 443;
+    server_name elkaflame.com www.elkaflame.com blog.elkaflame.com;
 
     add_header Cache-Control "no-cache, no-store";
 
-    #include conf/ssl.include;
+    include conf/ssl.include;
 
-    #ssl_certificate /etc/nginx/ssl/elkaflame.com.cert;
-    #ssl_certificate_key /etc/nginx/ssl/elkaflame.com.key;
+    ssl_certificate /etc/nginx/ssl/elkaflame.com.cert;
+    ssl_certificate_key /etc/nginx/ssl/elkaflame.com.key;
 
-    access_log /var/log/nginx/dyndns-access.log;
-    error_log /var/log/nginx/dyndns-error.log;
+    access_log /var/log/nginx/elkaflame-access.log;
+    error_log /var/log/nginx/elkaflame-error.log;
 
     client_max_body_size 5m;
 
