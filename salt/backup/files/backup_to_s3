@@ -21,7 +21,7 @@ BACKUP_TAR="/tmp/${BACKUP_NAME}.`/bin/date "+%Y-%m-%d@%s"`.tar.gz"
 
 /usr/bin/s3cmd -e -c "$CONFIG_FILE" put "$BACKUP_TAR" "s3://${BUCKET}/"
 
-s3cmd -c "$CONFIG_FILE" ls "s3://${BUCKET}/" | \
+s3cmd -c "$CONFIG_FILE" ls "s3://${BUCKET}/${BACKUP_NAME}*" | \
     awk '$1 != "DIR"' | \
     sort -r | \
     awk -v retain="$RETAIN" 'NR > retain {print $4;}' | \
