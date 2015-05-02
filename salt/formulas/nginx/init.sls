@@ -1,3 +1,14 @@
+{% if grains['cpuarch'] == 'armv6l' %}
+{% set passenger_root = '' %}
+passenger:
+  gem.installed:
+    - version: 5.0.6
+libcurl4-openssl-dev: pkg.installed
+ruby1.9.1-dev: pkg.installed
+## TODO: Link /opt/nginx/sbin/nginx to /usr/sbin/nginx
+## Need to run sudo passenger-install-nginx-module
+{% else %}
+{% set passenger_root = '/usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;' %}
 passenger_repo:
   pkgrepo.managed:
     - names:
@@ -8,6 +19,7 @@ passenger_repo:
     - keyserver: hkp://keyserver.ubuntu.com:80
 
 passenger: pkg.installed
+{% endif %}
 
 nginx:
   pkg:
@@ -31,7 +43,10 @@ dhparam:
 
 /etc/nginx/nginx.conf:
   file.managed:
-    - source: salt://formulas/nginx/files/nginx.conf
+    - source: salt://formulas/nginx/templates/nginx.conf.template
+    - template: jinja
+    - defaults:
+      passenger_root: {{ passenger_root }}
     - watch_in:
       - service: nginx
 
