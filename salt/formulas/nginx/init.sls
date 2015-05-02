@@ -5,6 +5,7 @@ passenger:
     - version: 5.0.6
 libcurl4-openssl-dev: pkg.installed
 ruby1.9.1-dev: pkg.installed
+{% set passenger_root = '/var/lib/gems/1.9.1/gems/passenger-5.0.6' %}
 ## TODO: Link /opt/nginx/sbin/nginx to /usr/sbin/nginx
 ## Need to run sudo passenger-install-nginx-module
 {% else %}
@@ -33,6 +34,11 @@ nginx:
 /usr/sbin/nginx:
   file.symlink:
     - target: /opt/nginx/sbin/nginx
+    - force: true
+
+/opt/nginx/conf:
+  file.symlink:
+    - target: /etc/nginx
     - force: true
 {% endif %}
 
