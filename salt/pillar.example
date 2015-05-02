@@ -34,6 +34,7 @@ backup:
   accessKeyId: <YOUR_PUB_KEY>
   secretAccessKey: <YOUR_PRIV_KEY>
   gpg_passphrase: <A_PASSPHRASE_THAT_YOU_HAVE_SAVED_SOMEPLACE_SAFE>
+  admin_email: <YOUR_EMAIL>
   targets:
     - dir: /var/www/ghost/content
       name: ghost

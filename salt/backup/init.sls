@@ -5,6 +5,7 @@ backup_deps:
     - pkgs:
       - gnupg
       - s3cmd
+      - bsd-mailx
 
 /etc/s3cfg-backup:
   file.managed:
@@ -24,8 +25,9 @@ backup_deps:
 {% for target in backup.targets %}
 backup_{{ target.name }}:
   cron.present:
-    - name: /usr/local/bin/backup_to_s3 {{ backup.bucket }} {{ target.dir }} {{ target.name }} {{ target.retain }}
+    - name: /usr/local/bin/backup_to_s3 {{ backup.bucket }} {{ target.dir }} {{ target.name }} {{ target.retain }} > /var/log/{{ target.name }}.last_backup 2>&1 || mail -s "{{ target.name }} backup failed on `hostname`" {{ backup.admin_email }}
     - hour: "{{ target.hour }}"
+    - minute: 1
     - identifier: backup_{{ target.name }}
 {% endfor %}
 
