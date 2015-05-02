@@ -24,12 +24,17 @@ passenger: pkg.installed
 nginx:
   pkg:
     - installed
-    - require:
-      - pkgrepo: passenger_repo
   service:
     - running
     - watch:
       - file: /etc/nginx/sites-available/*
+
+{% if grains['cpuarch'] == 'armv6l' %}
+/usr/sbin/nginx:
+  file.symlink:
+    - target: /opt/nginx/sbin/nginx
+    - force: true
+{% endif %}
 
 /etc/nginx/conf: file.directory
 /etc/nginx/ssl: file.directory
